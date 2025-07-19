@@ -1,0 +1,21 @@
+<svg width="64" height="64" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- KnowFlow Logo -->
+  <defs>
+    <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1E90FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8A2BE2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Hexagonal background -->
+  <path d="M256 150 L768 150 L896 400 L768 650 L256 650 L128 400 Z" fill="url(#gradient1)" stroke="none"/>
+  
+  <!-- Flow lines -->
+  <path d="M200 300 Q400 250 600 300 Q700 350 800 300" stroke="#1a1a1a" stroke-width="40" fill="none" stroke-linecap="round"/>
+  <path d="M200 400 Q400 350 600 400 Q700 450 800 400" stroke="#1a1a1a" stroke-width="40" fill="none" stroke-linecap="round"/>
+  <path d="M200 500 Q400 450 600 500 Q700 550 800 500" stroke="#1a1a1a" stroke-width="40" fill="none" stroke-linecap="round"/>
+  
+  <!-- Knowledge node -->
+  <circle cx="350" cy="400" r="60" fill="#1a1a1a"/>
+  <circle cx="350" cy="400" r="30" fill="#ffffff"/>
+</svg>
