@@ -431,6 +431,6 @@ docker compose logs -f
 
 安装完成后，您可以：
 
-1. 查看[用户指南](./user-guide)了解如何使用系统
-2. 阅读[配置文档](./configuration)进行高级配置
-3. 参考[开发指南](./development)进行二次开发
+1. 查看[产品使用指南](./产品使用/user-management)了解如何使用系统
+2. 阅读[常见问题](./常见问题/installation-faq)解决配置问题
+3. 参考[技术FAQ](./常见问题/technical-faq)了解技术细节
