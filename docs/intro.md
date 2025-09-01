@@ -4,17 +4,17 @@ sidebar_position: 1
 
 # 🚀 KnowFlow 介绍
 
-欢迎使用 **KnowFlow** - RAGFlow 企业级落地的最后一公里服务！
+欢迎使用 **KnowFlow** - 基于 RAGFlow 的企业级智能知识库解决方案！
 
 :::tip 快速了解
-KnowFlow 是基于 RAGFlow 的开源项目，专为企业级场景设计，提供插件化架构和丰富的企业级特性。
+KnowFlow 是基于 RAGFlow v0.20.1 深度定制的企业级开源项目，提供插件化架构、RBAC权限管理、父子分块、API开放接口等丰富的企业级特性。
 :::
 
 ## 项目简介
 
-KnowFlow 是一个基于 RAGFlow 的开源项目，持续兼容 RAGFlow 官方版本，同时会将社区里做的比较好的最佳实践整合进来。KnowFlow 可以理解成 RAGFlow 官方开源产品真正落地企业场景的最后一公里服务。
+KnowFlow 是一个基于 RAGFlow 的企业级开源知识库解决方案，持续兼容 RAGFlow 官方版本（当前适配 RAGFlow v0.20.1），同时将社区最佳实践整合进来。KnowFlow 专注于为企业提供真正落地的最后一公里服务，解决从开源到生产的关键差距。
 
-## 🌟 项目亮点
+## 🌟 核心优势
 
 <div className="row">
   <div className="col col--6">
@@ -27,6 +27,7 @@ KnowFlow 是一个基于 RAGFlow 的开源项目，持续兼容 RAGFlow 官方�
           <li>无缝兼容 RAGFlow 任意版本</li>
           <li>所有增强均可热插拔</li>
           <li>升级无忧，零入侵设计</li>
+          <li>微服务分布式架构</li>
         </ul>
       </div>
     </div>
@@ -34,13 +35,14 @@ KnowFlow 是一个基于 RAGFlow 的开源项目，持续兼容 RAGFlow 官方�
   <div className="col col--6">
     <div className="card">
       <div className="card__header">
-        <h3>🧩 分块策略丰富</h3>
+        <h3>🧠 智能文档解析</h3>
       </div>
       <div className="card__body">
         <ul>
-          <li>支持多种分块算法</li>
-          <li>检索更精准</li>
-          <li>适配多场景文档</li>
+          <li>MinerU v2.1.11 OCR 引擎</li>
+          <li>支持 20+ 种文档格式</li>
+          <li>图文混排输出</li>
+          <li>父子分块策略</li>
         </ul>
       </div>
     </div>
@@ -51,14 +53,14 @@ KnowFlow 是一个基于 RAGFlow 的开源项目，持续兼容 RAGFlow 官方�
   <div className="col col--6">
     <div className="card">
       <div className="card__header">
-        <h3>🏢 企业级特性</h3>
+        <h3>🏢 企业级管理</h3>
       </div>
       <div className="card__body">
         <ul>
-          <li>MinerU2.x OCR 引擎</li>
-          <li>团队/用户/权限管理</li>
+          <li>RBAC 权限管理系统</li>
+          <li>团队协作与用户管理</li>
           <li>企业微信集成</li>
-          <li>LDAP/SSO（开发中）</li>
+          <li>纯离线部署支持</li>
         </ul>
       </div>
     </div>
@@ -66,38 +68,48 @@ KnowFlow 是一个基于 RAGFlow 的开源项目，持续兼容 RAGFlow 官方�
   <div className="col col--6">
     <div className="card">
       <div className="card__header">
-        <h3>📈 最佳实践集成</h3>
+        <h3>🔌 开放集成</h3>
       </div>
       <div className="card__body">
         <ul>
-          <li>持续吸收社区优质方案</li>
-          <li>助力企业高效落地</li>
-          <li>经过实战验证</li>
+          <li>完整的 HTTP API 接口</li>
+          <li>OpenAI 兼容 API</li>
+          <li>第三方系统集成</li>
+          <li>自定义扩展支持</li>
         </ul>
       </div>
     </div>
   </div>
 </div>
 
-## 核心功能
+## 💡 核心功能
 
-### 适配 RAGFlow 全新 UI
-基于 RAGFlow v0.18.0 二次开发全新 UI 页面，目前已适配 v0.19.0。
+### 🎨 全新 UI 界面
+基于 RAGFlow v0.20.1 二次开发的现代化用户界面，提供更加优美的用户体验。
 
-### 用户后台管理系统
-- 移除原登陆页用户注册的通道
-- 搭建用户后台管理系统，可对用户进行管理
-- 包括用户管理、团队管理、用户模型配置管理等功能
-- 新建用户时，新用户会自动加入创建时间最早用户的团队
+### 📄 智能文档解析
+- **MinerU v2.1.11**: 集成最新 OCR 引擎，支持 GPU 加速
+- **多格式支持**: PPT、Word、Excel、PDF、图片等 20+ 种格式
+- **图文混排**: 保持原文档的图片、表格、公式等内容
+- **分块策略**: 文档结构分块、按标题分块、父子分块等多种策略
 
-### 图文混排输出
-- 支持市面上常见的文件格式，如 ppt/png/word/doc/excel 等
-- 保持和官方 markdown 完全一致的分块规则
-- 共提供了三种分块策略：文档结构分块、按标题分块、RAGFlow 原分块
-- 无缝对接 RAGFlow 知识库系统，文档自动解析和分块
+### 👥 RBAC 权限管理
+- **基于角色的访问控制**: 细粒度权限管理
+- **全局角色与资源角色**: 支持多层级权限继承
+- **团队协作**: 支持团队权限批量管理
+- **权限审计**: 完善的操作日志和权限追踪
 
-### 支持企业微信应用
-支持企业微信应用，可将企业微信应用作为聊天机器人，使用企业微信应用进行聊天。
+### 🔗 开放 API 接口
+- **RESTful API**: 完整的知识库管理 API
+- **OpenAI 兼容**: 支持标准的 Chat Completions 接口
+- **文档解析 API**: MinerU 解析服务 API
+- **权限管理 API**: RBAC 权限控制接口
+
+### 💼 企业微信集成
+支持企业微信应用，可将企业微信作为聊天机器人入口，实现企业内部知识问答。
+
+### 🔒 纯离线部署
+支持完全离线环境部署，满足高安全性要求，所有数据本地存储，无需联网。
 
 ## 快速开始
 

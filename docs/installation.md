@@ -45,117 +45,202 @@ git clone https://github.com/weizxfree/KnowFlow.git
 cd KnowFlow
 ```
 
-### ⚙️ 2. 运行 MinerU 服务
+### ⚙️ 2. 部署 MinerU 服务
 
-MinerU 是 KnowFlow 的核心 OCR 引擎，提供两个版本供选择：
+MinerU 是 KnowFlow 的核心文档解析引擎，基于 MinerU v2.1.11，支持多种部署模式：
 
-#### 🌟 完整版（推荐）
+#### 🌟 完整版部署（同时支持 Pipline 和 VLM）
 
-包含所有功能，支持完整的 VLM 功能和所有后端类型：
+包含所有功能，支持 VLM 推理和多种后端模式：
 
+**GPU 环境：**
 ```bash
-docker run --rm -d --gpus=all \
-  --shm-size=32g \
-  -p 8888:8888 -p 30000:30000 \
+docker run -d --gpus all \
   --name mineru-api \
-  zxwei/mineru-api-full:2.1.0
-```
-
-#### 📦 基础版
-
-仅包含基础功能，主要支持 pipeline 后端：
-
-```bash
-docker run --rm -d --gpus=all \
-  --shm-size=32g \
   -p 8888:8888 \
+  -p 30000:30000 \
+  --restart unless-stopped \
+  --shm-size=32g \
+  -e MINERU_DEVICE_MODE=gpu \
+  -e MINERU_MODEL_SOURCE=local \
+  -e SGLANG_MEM_FRACTION_STATIC=0.8 \
+  zxwei/mineru-api-full:v2.1.11
+```
+
+**CPU 环境：**
+```bash
+docker run -d \
   --name mineru-api \
-  zxwei/mineru-api:2.1.0
+  -p 8888:8888 \
+  --restart unless-stopped \
+  --shm-size=32g \
+  -e MINERU_DEVICE_MODE=cpu \
+  -e MINERU_MODEL_SOURCE=local \
+  zxwei/mineru-api-full:v2.1.11
 ```
 
-#### 📋 镜像说明
+#### 📦 基础版部署（仅支持 Pipline）
 
-| 镜像版本 | 功能特点 | 适用场景 |
-|---------|---------|----------|
-| `zxwei/mineru-api-full:2.1.0` | 包含完整的 VLM 功能，支持所有后端类型 | 生产环境，需要完整功能 |
-| `zxwei/mineru-api:2.1.0` | 基础版本，主要支持 pipeline 后端 | 测试环境，基础功能验证 |
+仅包含核心功能，适合资源受限环境：
 
-:::warning 注意事项
-- 如果没有 GPU，请移除 `--gpus=all` 参数
-- 确保端口 8888 和 30000（完整版）未被占用
-- `--shm-size=32g` 参数用于提供足够的共享内存
+```bash
+docker run -d \
+  --name mineru-api \
+  -p 8888:8888 \
+  --restart unless-stopped \
+  --shm-size=4g \
+  -e MINERU_DEVICE_MODE=cpu \
+  -e INSTALL_TYPE=core \
+  zxwei/mineru-api-full:v2.1.11
+```
+
+#### 📋 部署配置说明
+
+| 环境变量 | 说明 | 可选值 |
+|---------|------|--------|
+| `MINERU_DEVICE_MODE` | 运行模式 | `gpu`（推荐）、`cpu` |
+| `MINERU_MODEL_SOURCE` | 模型源 | `local`（预置）、`modelscope`、`huggingface` |
+| `SGLANG_MEM_FRACTION_STATIC` | GPU内存占用比例 | `0.6`-`0.9`（默认0.8） |
+| `INSTALL_TYPE` | 安装类型 | `full`（默认）、`core` |
+
+#### ✅ 服务验证
+
+部署完成后，验证 MinerU 服务状态：
+
+```bash
+# 检查容器状态
+docker ps | grep mineru-api
+
+# 检查服务健康状态
+curl http://localhost:8888/health
+
+# 查看服务日志
+docker logs mineru-api
+```
+
+**健康检查响应示例：**
+```json
+{
+    "status": "healthy",
+    "service": "MinerU API",
+    "version": "2.1.11",
+    "backend_status": {
+        "pipeline": "available",
+        "vlm-sglang-client": "connected"
+    },
+    "timestamp": "2024-01-15T10:30:00Z"
+}
+```
+
+:::warning 部署注意事项
+- **内存要求**: 完整版至少需要 8GB 内存，基础版至少 4GB
+- **存储空间**: 首次运行会下载模型，需要 5-10GB 存储空间
+- **网络要求**: 首次启动需要联网下载模型（如使用 `local` 模式则无需联网）
+- **GPU 支持**: 使用 GPU 可显著提升处理速度，但非必需
 :::
 
-### 🔧 3. 执行安装脚本
+### ⚙️ 3. 配置 MinerU 服务地址
 
-运行自动配置脚本：
-
-```bash
-./scripts/install.sh
-```
-
-#### ✨ 自动配置功能
-
-脚本将自动完成以下配置：
-
-✅ **自动检测本机 IP 地址**  
-✅ **自动创建 `.env` 配置文件**（如果不存在）  
-✅ **智能配置选项**：如果 `.env` 文件已存在，提供保留或重新生成选项  
-✅ **预填充配置项**：自动填写 HOST_IP、ES_HOST 等配置项  
-
-### 📝 4. 配置环境变量
-
-安装脚本会创建 `.env` 文件模板，您需要手动配置以下关键参数：
+配置 KnowFlow 连接 MinerU 服务，根据项目最新结构，配置文件位于：
 
 ```bash
-# RAGFlow 服务地址（必须手动填写）
-# IP 一般填写宿主机的 IP，端口可写 RAGFlow 的 9380 端口
-RAGFLOW_BASE_URL=http://检测到的IP:9380
-
-# 示例：
-# RAGFLOW_BASE_URL=http://192.168.1.100:9380
+vim knowflow/server/services/config/settings.yaml
 ```
 
-:::tip 配置提示
-- 将 `检测到的IP` 替换为您的实际服务器 IP 地址
-- 端口号根据实际 RAGFlow 服务端口调整
-- 其他配置项已由脚本自动填写，通常无需修改
-:::
+#### 更新 MinerU 配置
 
-### 🔗 5. 配置 MinerU 服务地址
-
-编辑 MinerU 配置文件：
-
-```bash
-vim /opt/KnowFlow-1.1.5/server/services/config/settings.yaml
-```
-
-找到 `mineru` 配置段落，更新服务地址：
+在配置文件中找到 `mineru` 部分，更新服务地址：
 
 ```yaml
 mineru:
   fastapi:
-    # 将 IP 地址替换为本机实际 IP
-    url: "http://10.0.0.82:8888"
+    # MinerU FastAPI 服务地址
+    # Docker部署: http://host.docker.internal:8888 (Docker Desktop)
+    #           或 http://宿主机IP:8888 (Linux Docker)
+    # 本地开发: http://localhost:8888
+    url: "http://宿主机IP:8888"
+    
+    # HTTP 请求超时时间（毫秒）
+    timeout: 30000
+
+  # VLM 后端配置（完整版镜像需要）
   vlm:
     sglang:
-      # 如果使用完整版镜像，配置 SGLang 服务地址
-      server_url: "http://10.0.0.82:30000"
+      # SGLang 服务器地址（vlm-sglang-client 后端需要）
+      # Docker部署时同样需要使用宿主机IP或容器网络地址
+      server_url: "http://宿主机IP:30000"
 ```
 
-:::warning 重要配置
-- 将 `10.0.0.82` 替换为您的实际服务器 IP 地址
-- 确保 IP 地址与 MinerU 容器运行的主机 IP 一致
-- 端口 8888 对应 MinerU API 服务
-- 端口 30000 仅在使用完整版镜像时需要配置
-:::
+#### 配置示例
 
-### 🎯 6. 启动 KnowFlow 服务
+```yaml
+# 示例配置（替换为实际IP地址）
+mineru:
+  fastapi:
+    url: "http://192.168.1.100:8888"     # MinerU API服务地址
+    timeout: 30000
+  vlm:
+    sglang:
+      server_url: "http://192.168.1.100:30000"  # SGLang服务地址
+```
 
-使用 Docker Compose 启动所有服务：
+#### 不同环境的配置
+
+**Docker Desktop (Mac/Windows)**:
+```yaml
+mineru:
+  fastapi:
+    url: "http://host.docker.internal:8888"
+  vlm:
+    sglang:
+      server_url: "http://host.docker.internal:30000"
+```
+
+**Linux Docker**:
+```yaml
+mineru:
+  fastapi:
+    url: "http://172.17.0.1:8888"  # 或使用实际宿主机IP
+  vlm:
+    sglang:
+      server_url: "http://172.17.0.1:30000"
+```
+
+#### 配置验证
+
+配置完成后，验证 MinerU 服务连接：
 
 ```bash
-docker compose up -d
+# 测试 MinerU API 连接
+curl -X GET "http://宿主机IP:8888/health"
+
+# 预期响应
+{
+  "status": "healthy",
+  "service": "MinerU API",
+  "version": "2.1.11"
+}
+```
+
+:::tip 配置说明
+- **服务地址**: 根据实际部署环境选择合适的地址配置
+- **端口说明**: 8888 是 MinerU API 端口，30000 是 SGLang 服务端口
+- **网络连通**: 确保 KnowFlow 服务能够访问 MinerU 服务
+- **超时设置**: timeout 设置为 30000 毫秒（30秒），适应大文档解析需求
+:::
+
+### 🎯 4. 启动 KnowFlow 服务
+
+进入 Docker 目录并启动服务（与 RAGFlow 官方保持一致）：
+
+```bash
+cd docker
+
+# 如有 GPU 支持
+docker compose -f docker-compose-gpu.yml up -d
+
+# 无 GPU 环境
+docker compose -f docker-compose.yml up -d
 ```
 
 #### 🔍 服务启动验证
@@ -168,21 +253,41 @@ docker compose ps
 
 # 查看服务日志
 docker compose logs -f
+
+# 检查关键服务健康状态
+curl http://localhost:8888/health  # MinerU API 健康检查
+curl http://localhost:80/health     # KnowFlow 前端健康检查
 ```
 
-### 🌐 7. 访问系统
+### 🌐 5. 访问系统
 
 服务启动完成后，通过以下地址访问：
 
-| 界面类型 | 访问地址 | 用途说明 |
-|---------|---------|----------|
-| **管理界面** | `http://服务器IP:8081` | 系统管理和用户配置 |
-| **用户界面** | `http://服务器IP:80` | 知识库操作和问答 |
+| 服务 | 访问地址 | 说明 |
+|------|---------|------|
+| **KnowFlow 主界面** | `http://服务器IP:80` | 知识库管理和智能问答 |
+| **MinerU API** | `http://服务器IP:8888` | 文档解析服务 |
 
-:::tip 首次访问
-- 管理界面用于系统管理和用户配置
-- 用户界面用于日常的知识库操作和问答
-- 首次登录请使用默认管理员账号
+#### 默认管理员账户
+
+系统启动后，使用以下默认超级管理员账户登录：
+
+```
+邮箱：admin@gmail.com
+密码：admin
+```
+
+#### 首次使用设置
+
+1. **修改默认密码**: 登录后立即修改管理员密码
+2. **创建普通用户**: 在系统设置中创建其他用户账号
+3. **配置团队权限**: 设置用户角色和团队协作权限
+4. **测试文档解析**: 上传测试文档验证 MinerU 服务正常
+
+:::tip 系统访问提示
+- 首次登录后，请及时修改默认密码确保系统安全
+- 新创建的用户会自动加入创建时间最早用户的团队
+- 管理员具有 RBAC 权限管理功能，可精细控制用户权限
 :::
 
 ## 💻 源码运行
@@ -201,105 +306,157 @@ docker compose logs -f
 | **Node.js** | 16+ | `node --version` |
 | **pnpm** | 最新版本 | `pnpm --version` |
 
-### 🚀 启动后端
-
-#### 1️⃣ **安装依赖**
+#### 1️⃣ **KnowFlow 后端部署**
 ```bash
-cd management/server
+cd knowflow/server
 python3 -m venv venv
 source venv/bin/activate  # Linux/Mac
-# venv\Scripts\activate  # Windows
+# venv\\Scripts\\activate  # Windows
 pip install -r requirements.txt
 ```
 
-#### 2️⃣ **开启文件格式转化服务**（可选）
-
-:::info 格式支持
-支持 PDF 以外文件格式需要开启此服务，如 Word、Excel、PPT 等。
-:::
-
+#### 2️⃣ **启动文件转换服务**（可选）
 ```bash
+# 支持 PDF 以外文件格式需要启动此服务
 docker run -d -p 3000:3000 gotenberg/gotenberg:8
 ```
 
-#### 3️⃣ **启动后端服务**
+#### 3️⃣ **执行初始化脚本**
+```bash
+cd knowflow/
+./scripts/install.sh --local
+```
+
+#### 4️⃣ **启动 KnowFlow 后端**
 ```bash
 python3 app.py
 ```
 
-:::tip 后端服务说明
-后端服务启动后，请记录控制台显示的端口号，前端配置时需要用到。
-:::
+#### 5️⃣ **RAGFlow 后端部署**
+
+```bash
+# 修改 docker/entrypoint.sh 文件，注释掉 nginx 行
+# /usr/sbin/nginx
+
+# 激活 Python 虚拟环境
+source .venv/bin/activate
+export PYTHONPATH=$(pwd)
+
+# 配置 HuggingFace 镜像（可选）
+export HF_ENDPOINT=https://hf-mirror.com
+
+# 启动后端服务
+./local_entrypoint.sh
+```
 
 ### 🎨 启动前端
 
 #### 1️⃣ **安装依赖**
 ```bash
-cd management/web
-pnpm i
+cd web
+pnpm install
 ```
 
-#### 2️⃣ **启动前端程序**
+#### 2️⃣ **启动开发服务器**
 ```bash
 pnpm dev
 ```
 
 #### 3️⃣ **访问系统**
 
-| 服务类型 | 访问地址 | 说明 |
-|---------|---------|------|
-| **开发服务器** | 控制台显示的地址 | 通常为 `http://localhost:5173` |
-| **热重载** | ✅ 支持 | 修改代码自动刷新 |
+浏览器访问启动后显示的地址，通常为 `http://localhost:5173`
 
 :::tip 开发提示
 - 前端支持热重载，修改代码后自动刷新
-- 确保后端服务已启动，否则前端无法正常工作
+- 确保 MinerU、KnowFlow 后端、RAGFlow 后端都已启动
 - 开发环境下可以实时查看日志和调试信息
 :::
 
-## MinerU 本地调试（开发环境）
+## 🔧 高级部署选项
 
-如果您需要在本地环境进行开发调试，可以直接运行 MinerU 服务：
+### MinerU 本地开发模式
 
-### 1. 安装 Python 依赖
+如果您需要在本地进行开发调试，可以直接运行 MinerU 源码：
+
+#### 1. 环境准备
 
 ```bash
-# 注意：zsh 需要用引号包围方括号
-pip install "mineru[core]" fastapi uvicorn python-multipart
+# 克隆 MinerU 源码（如果需要）
+git clone https://github.com/opendatalab/MinerU.git
+cd MinerU
+
+# 安装依赖
+pip install "mineru[core]>=2.1.11" fastapi uvicorn python-multipart requests loguru
 ```
 
-### 2. 设置环境变量
+#### 2. 环境变量配置
 
 ```bash
-export MINERU_DEVICE_MODE=cpu
+# 设备模式
+export MINERU_DEVICE_MODE=cpu  # 或 gpu
+
+# 模型源（国内推荐使用 modelscope）
 export MINERU_MODEL_SOURCE=modelscope
+
+# 日志级别
+export LOG_LEVEL=INFO
 ```
 
-### 3. 启动本地服务
+#### 3. 启动开发服务
+
+进入 KnowFlow 项目中的 MinerU API 目录：
 
 ```bash
-cd web_api
+cd knowflow/web_api
 python app.py
 ```
 
-### 4. 配置 settings.yaml
+服务启动后会显示：
+```
+INFO:     Uvicorn running on http://0.0.0.0:8888 (Press CTRL+C to quit)
+```
 
-使用本地 MinerU 服务时，需要修改 `server/services/config/settings.yaml` 中的服务地址：
+#### 4. 配置连接地址
+
+开发模式下，修改 `knowflow/server/services/config/settings.yaml` 配置：
 
 ```yaml
 mineru:
   fastapi:
-    # 本地开发服务地址
-    url: "http://localhost:8888"
-  
+    url: "http://localhost:8888"  # 本地开发地址
+    timeout: 30000
   vlm:
     sglang:
-      # 本地SGLang服务地址（如果使用vlm-sglang-client后端）
-      server_url: "http://localhost:30000"
+      server_url: "http://localhost:30000"  # 如需SGLang功能
 ```
 
-:::tip 提示
-本地调试模式适合开发环境，生产环境建议使用Docker方式部署。
+
+
+### 性能调优配置
+
+#### GPU 内存优化
+
+```bash
+# 调整 GPU 内存占用比例
+docker run -d --gpus all \
+  -e SGLANG_MEM_FRACTION_STATIC=0.7 \  # 降低内存占用
+  zxwei/mineru-api-full:v2.1.11
+```
+
+#### 并发处理优化
+
+```bash
+# 增加工作进程数
+docker run -d \
+  -e WORKERS=4 \  # 4个工作进程
+  -e MAX_REQUESTS=1000 \  # 最大请求数
+  zxwei/mineru-api-full:v2.1.11
+```
+
+:::tip 开发建议
+- **开发环境**: 推荐使用本地开发模式，便于调试
+- **测试环境**: 使用 Docker 单容器部署
+- **生产环境**: 使用 Docker Compose 集成部署，便于管理和扩展
 :::
 
 ## 配置说明
@@ -315,122 +472,269 @@ mineru:
 请确保回答简洁、专业，将图片自然地融入回答
 ```
 
-## 故障排除
+## 🔧 故障排除
 
-### 常见问题
+### MinerU 部署问题
 
-#### MinerU 服务无法启动
+#### 🚨 容器启动失败
 
-**可能原因**：
-- 端口被占用
-- GPU 驱动问题
-- 内存不足
+**现象**: MinerU 容器无法启动或立即退出
 
-**解决方案**：
+**排查步骤**:
 ```bash
-# 检查端口占用
-netstat -tlnp | grep 8888
+# 1. 查看容器状态
+docker ps -a | grep mineru
 
-# 检查 GPU 状态（如果使用 GPU）
-nvidia-smi
-
-# 检查容器日志
+# 2. 检查容器日志
 docker logs mineru-api
+
+# 3. 检查端口占用
+lsof -i :8888
+lsof -i :30000
+
+# 4. 检查系统资源
+free -h
+df -h
 ```
 
-#### 配置文件路径错误
-
-**问题**：找不到 `settings.yaml` 文件
-
-**解决方案**：
+**常见解决方案**:
 ```bash
-# 查找配置文件位置
-find . -name "settings.yaml" -type f
+# 端口被占用 - 更换端口
+docker run -p 8889:8888 zxwei/mineru-api-full:v2.1.11
 
-# 或者使用相对路径
-vim server/services/config/settings.yaml
+# 内存不足 - 降低共享内存
+docker run --shm-size=4g zxwei/mineru-api-full:v2.1.11
+
+# GPU问题 - 使用CPU模式
+docker run -e MINERU_DEVICE_MODE=cpu zxwei/mineru-api-full:v2.1.11
 ```
 
-#### 服务无法访问
+#### 🔌 服务连接问题
 
-**可能原因**：
-- 防火墙阻止
-- IP 地址配置错误
-- 服务未正常启动
+**现象**: KnowFlow 无法连接 MinerU 服务
 
-**解决方案**：
+**排查步骤**:
 ```bash
-# 检查防火墙状态
-sudo ufw status
+# 1. 测试 MinerU API 连通性
+curl -X GET "http://YOUR_IP:8888/health"
 
-# 开放必要端口
-sudo ufw allow 8081
-sudo ufw allow 80
+# 2. 检查网络连接
+docker network ls
+docker inspect mineru-api | grep NetworkMode
 
-# 检查服务状态
+# 3. 验证配置文件
+grep -r "mineru" knowflow/server/services/config/settings.yaml
+```
+
+**解决方案**:
+```bash
+# 网络问题 - 使用host网络
+docker run --network host zxwei/mineru-api-full:v2.1.11
+
+# 配置错误 - 更新settings.yaml
+mineru:
+  fastapi:
+    url: "http://docker.for.mac.host.internal:8888"  # Mac Docker Desktop
+    # url: "http://host.docker.internal:8888"        # Windows Docker Desktop  
+    # url: "http://172.17.0.1:8888"                  # Linux Docker
+```
+
+#### 🐍 模型下载问题
+
+**现象**: 首次启动时模型下载失败或缓慢
+
+**解决方案**:
+```bash
+# 1. 使用国内模型源
+docker run -e MINERU_MODEL_SOURCE=modelscope zxwei/mineru-api-full:v2.1.11
+
+# 2. 预下载模型（可选）
+docker run --rm -v mineru_models:/app/models \
+  zxwei/mineru-api-full:v2.1.11 \
+  python -c "import mineru; mineru.download_models()"
+
+# 3. 使用预置模型镜像（推荐）
+docker run zxwei/mineru-api-full:v2.1.11  # 已包含所有模型
+```
+
+#### 💾 性能问题
+
+**现象**: 文档解析速度较慢或内存占用过高
+
+**优化方案**:
+```bash
+# 1. 启用GPU加速
+docker run --gpus all -e MINERU_DEVICE_MODE=gpu
+
+# 2. 调整内存参数
+docker run --shm-size=16g -m 32g  # 增加共享内存和最大内存
+
+# 3. 优化SGLang配置
+docker run -e SGLANG_MEM_FRACTION_STATIC=0.6  # 降低GPU内存占用
+
+# 4. 使用基础版镜像（如果不需要VLM功能）
+docker run -e INSTALL_TYPE=core zxwei/mineru-api-full:v2.1.11
+```
+
+### KnowFlow 连接问题
+
+#### 📁 配置文件问题
+
+**现象**: 找不到 settings.yaml 或配置不生效
+
+**解决方案**:
+```bash
+# 1. 查找所有配置文件
+find . -name "settings.yaml" -type f 2>/dev/null
+
+# 2. 常见路径检查
+ls -la knowflow/server/services/config/settings.yaml
+
+# 3. 创建配置文件（如果不存在）
+mkdir -p knowflow/server/services/config
+cp settings.yaml.example knowflow/server/services/config/settings.yaml
+```
+
+#### 🌐 网络访问问题
+
+**现象**: 前端无法访问或API调用失败
+
+**排查命令**:
+```bash
+# 1. 检查服务状态
 docker compose ps
+
+# 2. 检查端口开放
+sudo ufw status
+sudo iptables -L
+
+# 3. 测试服务连通性
+curl -I http://localhost:80
+curl -X GET http://localhost:8888/health
 ```
 
-### 性能优化建议
+**解决方案**:
+```bash
+# 开放防火墙端口
+sudo ufw allow 80
+sudo ufw allow 8888
+sudo ufw allow 30000
 
-1. **使用 GPU 加速**：显著提升文档处理速度
-2. **增加内存**：处理大文件时避免内存不足
-3. **使用 SSD 存储**：提升 I/O 性能
-4. **网络优化**：确保稳定的网络连接
+# 检查Docker网络
+docker network inspect knowflow_default
+```
 
-### 日志查看
+### 日志诊断
+
+#### 📊 日志收集
 
 ```bash
-# 查看所有服务日志
-docker compose logs
+# MinerU 服务日志
+docker logs mineru-api > mineru.log 2>&1
 
-# 查看特定服务日志
-docker compose logs [服务名]
+# KnowFlow 服务日志  
+docker compose logs > knowflow.log 2>&1
 
-# 实时查看日志
-docker compose logs -f
+# 系统资源监控
+top -p $(docker inspect -f '{{.State.Pid}}' mineru-api)
 ```
 
-## 下一步
+#### 🔍 关键日志信息
+
+**正常启动日志**:
+```
+INFO:     Uvicorn running on http://0.0.0.0:8888
+INFO:     MinerU API服务启动成功
+INFO:     Backend pipeline initialized
+INFO:     SGLang server connected (if using full version)
+```
+
+**错误日志关键词**:
+- `CUDA out of memory`: GPU内存不足
+- `Address already in use`: 端口被占用  
+- `Connection refused`: 服务连接失败
+- `Model download failed`: 模型下载失败
+
+### 获取技术支持
+
+如果以上方法无法解决问题，可以通过以下方式获取帮助：
+
+1. **收集诊断信息**:
+```bash
+# 生成诊断报告
+./scripts/diagnose.sh > diagnosis.log 2>&1
+```
+
+2. **提交问题**:
+- [GitHub Issues](https://github.com/weizxfree/KnowFlow/issues) - 提交技术问题
+- [GitHub Discussions](https://github.com/weizxfree/KnowFlow/discussions) - 讨论和提问
+- 项目 README - 查看最新文档
+
+## 📋 部署总结
+
+### 快速部署流程
+
+1. **获取代码**: 克隆 KnowFlow 项目到本地
+2. **部署 MinerU**: 运行 MinerU 文档解析服务
+3. **配置连接**: 在 settings.yaml 中配置 MinerU 服务地址
+4. **启动服务**: 运行 docker-compose 启动所有服务
+5. **访问系统**: 用默认账号登录并完成初始化设置
+
+### 服务端口说明
+
+| 服务 | 端口 | 说明 | 必需性 |
+|------|------|------|--------|
+| **KnowFlow 前端** | 80 | 用户访问界面 | ✅ 必需 |
+| **RAGFlow API** | 9380 | RAGFlow 后端 API | ✅ 必需 |
+| **MinerU API** | 8888 | 文档解析服务 | ✅ 必需 |
+| **SGLang 服务** | 30000 | VLM 推理服务 | 🔶 完整版需要 |
+| **Gotenberg** | 3000 | 文档格式转换 | 🔶 可选 |
+| **KnowFlow 后端** | 5000 | 扩展功能服务 | 🔶 源码模式需要 |
+
+### 配置文件说明
+
+**关键配置文件位置**:
+```
+knowflow/server/services/config/settings.yaml  # MinerU 服务配置
+docker/.env                                    # Docker 环境变量
+docker/docker-compose.yml                     # 服务编排配置
+```
+
+### 图文混排功能配置
+
+图文混排功能需要正确配置聊天助手提示词模板：
+
+```
+请参考{knowledge}内容回答用户问题。
+如果知识库内容包含图片，请在回答中包含图片URL。
+注意这个 html 格式的 URL 是来自知识库本身，URL 不能做任何改动。
+请确保回答简洁、专业，将图片自然地融入回答内容中。
+```
+
+## 📚 下一步
+
+### 快速开始使用
 
 部署完成后，建议按以下顺序进行配置：
 
-1. [用户管理](./产品使用/user-management) - 创建和管理用户账号
-2. [文件上传](./产品使用/file-upload) - 上传文档到系统
-3. [知识库构建](./产品使用/knowledge-base) - 创建和配置知识库
-4. [解析内容查看](./产品使用/content-review) - 验证文档解析效果
+1. **[用户管理](./产品使用/rbac-permission)** - 了解RBAC权限管理和用户创建
+2. **[知识库管理](./产品使用/)** - 创建和配置知识库  
+3. **[文档解析](./产品使用/parent-child-chunking)** - 使用父子分块策略解析文档
+4. **[API集成](./API接口/api-overview)** - 通过API接口集成第三方系统
 
-如遇到问题，请参考 [常见问题](./常见问题/installation-faq) 获取帮助。
+### 相关文档
 
-## 高级配置
+- **[产品使用指南](./产品使用/rbac-permission)** - 详细的功能使用说明
+- **[API接口文档](./API接口/api-overview)** - 完整的API参考和示例
+- **[常见问题](./常见问题/)** - 解决部署和使用中的问题
+- **[GitHub项目](https://github.com/weizxfree/KnowFlow)** - 源码、问题反馈和讨论
 
-### Docker 容器启动失败
-   - 检查 Docker 和 Docker Compose 版本
-   - 确保端口未被占用
-   - 检查系统资源是否充足
+### 技术支持
 
-### MinerU 服务连接失败
-   - 检查 MinerU 容器是否正常运行
-   - 验证网络连接和端口配置
-   - 查看 settings.yaml 配置是否正确
+- **GitHub Issues**: [提交技术问题](https://github.com/weizxfree/KnowFlow/issues)
+- **GitHub Discussions**: [参与社区讨论](https://github.com/weizxfree/KnowFlow/discussions)
+- **项目文档**: 查看最新的README和更新日志
 
-3. **前端页面无法访问**
-   - 检查防火墙设置
-   - 确认服务端口是否正确开放
-   - 查看浏览器控制台错误信息
+---
 
-### 获取帮助
-
-如果您遇到问题，可以通过以下方式获取帮助：
-
-- [GitHub Issues](https://github.com/weizxfree/KnowFlow/issues)
-- [GitHub Discussions](https://github.com/weizxfree/KnowFlow/discussions)
-- 查看项目 README 文档
-
-## 下一步
-
-安装完成后，您可以：
-
-1. 查看[产品使用指南](./产品使用/user-management)了解如何使用系统
-2. 阅读[常见问题](./常见问题/installation-faq)解决配置问题
-3. 参考[技术FAQ](./常见问题/technical-faq)了解技术细节
+🎉 **恭喜！** 您已成功完成 KnowFlow 的部署。现在可以开始使用强大的企业级知识库功能了！
