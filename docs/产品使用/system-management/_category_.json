@@ -1,0 +1,8 @@
+{
+  "label": "系统管理",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "系统管理功能包括用户管理、团队管理、知识库管理等核心管理功能。"
+  }
+}
