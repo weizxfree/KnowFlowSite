@@ -12,6 +12,26 @@ sidebar_position: 1
 
 ## ⚙️ MinerU 服务相关
 
+
+### 🔧 Q: 如何 MinerU 解析的文件增加标题
+
+**A:**   
+```
+"llm-aided-config": {
+         "title_aided": {
+            "api_key": "sk-xxxxx",
+            "base_url": "https://api.siliconflow.cn/v1",
+            "model": "Qwen/Qwen3-32B",
+            "enable": true
+         }
+     },
+     "models-dir": {
+        "pipeline": "",
+        "pipeline": "/app/models/huggingface/models--opendatalab--PDF-Extract-Kit-1.0/snapshots/a447acb48da13ba6bf54b53170d614626a147e9b",
+         vlm": ""
+     },
+```
+
 ### 🔧 Q: 如何在本地环境调试 MinerU 服务？
 
 **A:** 如果您需要在本地环境进行开发调试，可以直接运行 MinerU 服务：
@@ -196,3 +216,6 @@ pnpm dev
 :::info 开发模式
 开发服务器支持热重载功能，代码修改后会自动刷新页面。
 :::
+
+
+
