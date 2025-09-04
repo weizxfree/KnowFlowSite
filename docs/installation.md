@@ -55,29 +55,17 @@ MinerU 是 KnowFlow 的核心文档解析引擎，基于 MinerU v2.1.11，支持
 
 **GPU 环境：**
 ```bash
-docker run -d --gpus all \
-  --name mineru-api \
-  -p 8888:8888 \
-  -p 30000:30000 \
-  --restart unless-stopped \
-  --shm-size=32g \
-  -e MINERU_DEVICE_MODE=gpu \
-  -e MINERU_MODEL_SOURCE=local \
-  -e SGLANG_MEM_FRACTION_STATIC=0.8 \
-  zxwei/mineru-api-full:v2.1.11
+docker run -d \
+    --gpus all \
+    -p 8888:8888 \
+    -p 30000:30000 \
+    --restart unless-stopped \
+    -e MINERU_MODEL_SOURCE=local \
+    -e SGLANG_MEM_FRACTION_STATIC=0.8 \
+    --name mineru-sglang \
+    zxwei/mineru-api-full:v2.1.11
 ```
 
-**CPU 环境：**
-```bash
-docker run -d \
-  --name mineru-api \
-  -p 8888:8888 \
-  --restart unless-stopped \
-  --shm-size=32g \
-  -e MINERU_DEVICE_MODE=cpu \
-  -e MINERU_MODEL_SOURCE=local \
-  zxwei/mineru-api-full:v2.1.11
-```
 
 #### 📦 基础版部署（仅支持 Pipline）
 
@@ -85,13 +73,13 @@ docker run -d \
 
 ```bash
 docker run -d \
-  --name mineru-api \
-  -p 8888:8888 \
-  --restart unless-stopped \
-  --shm-size=4g \
-  -e MINERU_DEVICE_MODE=cpu \
-  -e INSTALL_TYPE=core \
-  zxwei/mineru-api-full:v2.1.11
+    --gpus all \
+    -p 8888:8888 \
+    --restart unless-stopped \
+    --name mineru-pipeline \
+    -e MINERU_MODEL_SOURCE=local \
+    -e INSTALL_TYPE=core \
+    zxwei/mineru-api-full:v2.1.11
 ```
 
 #### 📋 部署配置说明
