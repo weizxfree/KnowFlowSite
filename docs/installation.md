@@ -45,11 +45,47 @@ git clone https://github.com/weizxfree/KnowFlow.git
 cd KnowFlow
 ```
 
-### ⚙️ 2. 部署 MinerU 服务
+### ⚙️ 2. 部署文档解析服务
 
-MinerU 是 KnowFlow 的核心文档解析引擎，基于 MinerU v2.1.11，支持多种部署模式：
+KnowFlow 支持 **DOTS** 和 **MinerU** 两种文档解析引擎，可以根据需求选择：
 
-#### 🌟 完整版部署（同时支持 Pipline 和 VLM）
+- **DOTS 解析引擎**（推荐）: 先进的文档智能解析引擎，MarkDown 文件标题识别效果更好
+- **MinerU v2.1.11**: 集成最新 OCR 引擎，支持 GPU 加速
+
+:::tip 推荐方案
+推荐使用 **DOTS 解析引擎**，对 MarkDown 文档的标题识别和复杂版式处理效果更佳。
+:::
+
+#### 🎯 方案一：DOTS 解析引擎（推荐）
+
+DOTS 是先进的文档智能解析引擎，支持复杂版式和多模态内容，对 MarkDown 文件的标题识别效果更好。
+
+**部署步骤：**
+
+```bash
+# 进入 DOTS 目录
+cd knowflow/dots
+
+# 执行部署脚本（自动下载模型和镜像）
+./deploy.sh
+```
+
+默认端口是 8000，如有冲突，可以手动调整 compose 文件。
+
+**服务验证：**
+```bash
+# 检查 DOTS 服务状态
+curl http://localhost:8000/health
+
+# 查看容器运行状态
+docker ps | grep dots
+```
+
+#### 🔧 方案二：MinerU 解析引擎
+
+MinerU 基于 v2.1.11，支持多种部署模式：
+
+##### 🌟 完整版部署（同时支持 Pipline 和 VLM）
 
 包含所有功能，支持 VLM 推理和多种后端模式：
 
@@ -127,17 +163,42 @@ docker logs mineru-api
 - **GPU 支持**: 使用 GPU 可显著提升处理速度，但非必需
 :::
 
-### ⚙️ 3. 配置 MinerU 服务地址
+### ⚙️ 3. 配置文档解析服务地址
 
-配置 KnowFlow 连接 MinerU 服务，根据项目最新结构，配置文件位于：
+根据您选择的解析引擎，配置 KnowFlow 连接相应服务。配置文件位于：
 
 ```bash
 vim knowflow/server/services/config/settings.yaml
 ```
 
-#### 更新 MinerU 配置
+#### 🎯 DOTS 配置（推荐）
 
-在配置文件中找到 `mineru` 部分，更新服务地址：
+如果您选择使用 DOTS 解析引擎，请在配置文件中添加 `dots` 部分：
+
+```yaml
+dots:
+  # VLLM 服务配置
+  vllm:
+    # DOTS OCR 服务地址
+    # 本地服务: http://localhost:8000
+    # 远程服务: http://{ip}:8000
+    url: "http://localhost:8000"
+
+    # 模型名称（根据部署配置调整）
+    model_name: "dotsocr-model"
+
+    # 请求超时时间（秒）
+    timeout: 300
+
+    # 生成参数
+    temperature: 0.1
+    top_p: 1.0
+    max_completion_tokens: 16384
+```
+
+#### 🔧 MinerU 配置
+
+如果您选择使用 MinerU 解析引擎，请在配置文件中找到 `mineru` 部分，更新服务地址：
 
 ```yaml
 mineru:
@@ -196,8 +257,22 @@ mineru:
 
 #### 配置验证
 
-配置完成后，验证 MinerU 服务连接：
+配置完成后，根据选择的解析引擎验证服务连接：
 
+**DOTS 服务验证：**
+```bash
+# 测试 DOTS API 连接
+curl -X GET "http://localhost:8000/health"
+
+# 预期响应
+{
+  "status": "healthy",
+  "service": "DOTS OCR",
+  "model": "dotsocr-model"
+}
+```
+
+**MinerU 服务验证：**
 ```bash
 # 测试 MinerU API 连接
 curl -X GET "http://宿主机IP:8888/health"
@@ -212,9 +287,12 @@ curl -X GET "http://宿主机IP:8888/health"
 
 :::tip 配置说明
 - **服务地址**: 根据实际部署环境选择合适的地址配置
-- **端口说明**: 8888 是 MinerU API 端口，30000 是 SGLang 服务端口
-- **网络连通**: 确保 KnowFlow 服务能够访问 MinerU 服务
-- **超时设置**: timeout 设置为 30000 毫秒（30秒），适应大文档解析需求
+- **端口说明**:
+  - DOTS 服务端口：8000
+  - MinerU API 端口：8888
+  - SGLang 服务端口：30000
+- **网络连通**: 确保 KnowFlow 服务能够访问解析服务
+- **超时设置**: 适应大文档解析需求，DOTS 为 300 秒，MinerU 为 30000 毫秒
 :::
 
 ### 🎯 4. 启动 KnowFlow 服务
@@ -663,8 +741,8 @@ INFO:     SGLang server connected (if using full version)
 ### 快速部署流程
 
 1. **获取代码**: 克隆 KnowFlow 项目到本地
-2. **部署 MinerU**: 运行 MinerU 文档解析服务
-3. **配置连接**: 在 settings.yaml 中配置 MinerU 服务地址
+2. **选择解析引擎**: 部署 DOTS（推荐）或 MinerU 文档解析服务
+3. **配置连接**: 在 settings.yaml 中配置相应解析服务地址
 4. **启动服务**: 运行 docker-compose 启动所有服务
 5. **访问系统**: 用默认账号登录并完成初始化设置
 
@@ -674,8 +752,9 @@ INFO:     SGLang server connected (if using full version)
 |------|------|------|--------|
 | **KnowFlow 前端** | 80 | 用户访问界面 | ✅ 必需 |
 | **RAGFlow API** | 9380 | RAGFlow 后端 API | ✅ 必需 |
-| **MinerU API** | 8888 | 文档解析服务 | ✅ 必需 |
-| **SGLang 服务** | 30000 | VLM 推理服务 | 🔶 完整版需要 |
+| **DOTS 解析服务** | 8000 | DOTS 文档解析服务 | 🔶 选择 DOTS 时需要 |
+| **MinerU API** | 8888 | MinerU 文档解析服务 | 🔶 选择 MinerU 时需要 |
+| **SGLang 服务** | 30000 | VLM 推理服务 | 🔶 MinerU 完整版需要 |
 | **Gotenberg** | 3000 | 文档格式转换 | 🔶 可选 |
 | **KnowFlow 后端** | 5000 | 扩展功能服务 | 🔶 源码模式需要 |
 
@@ -683,7 +762,7 @@ INFO:     SGLang server connected (if using full version)
 
 **关键配置文件位置**:
 ```
-knowflow/server/services/config/settings.yaml  # MinerU 服务配置
+knowflow/server/services/config/settings.yaml  # 文档解析服务配置（DOTS/MinerU）
 docker/.env                                    # Docker 环境变量
 docker/docker-compose.yml                     # 服务编排配置
 ```

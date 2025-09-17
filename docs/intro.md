@@ -39,6 +39,7 @@ KnowFlow 是一个基于 RAGFlow 的企业级开源知识库解决方案，持�
       </div>
       <div className="card__body">
         <ul>
+          <li>DOTS 解析引擎，MarkDown 标题识别更精准</li>
           <li>MinerU v2.1.11 OCR 引擎</li>
           <li>支持 20+ 种文档格式</li>
           <li>图文混排输出</li>
@@ -88,6 +89,7 @@ KnowFlow 是一个基于 RAGFlow 的企业级开源知识库解决方案，持�
 基于 RAGFlow v0.20.1 二次开发的现代化用户界面，提供更加优美的用户体验。
 
 ### 📄 智能文档解析
+- **DOTS 解析引擎**: 先进的文档智能解析引擎，支持复杂版式和多模态内容
 - **MinerU v2.1.11**: 集成最新 OCR 引擎，支持 GPU 加速
 - **多格式支持**: PPT、Word、Excel、PDF、图片等 20+ 种格式
 - **图文混排**: 保持原文档的图片、表格、公式等内容
