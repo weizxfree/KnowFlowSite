@@ -82,12 +82,32 @@ const config: Config = {
       },
       items: [
         {
+          to: '/',
+          label: '首页',
+          position: 'left',
+        },
+        {
+          to: '/product',
+          label: '产品',
+          position: 'left',
+        },
+        {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
           label: '文档',
         },
-        {to: '/blog', label: '博客', position: 'left'},
+        {
+          to: '/about',
+          label: '关于我们',
+          position: 'left',
+        },
+        {
+          to: '/contact',
+          label: '联系我们',
+          position: 'right',
+          className: 'navbar__item--cta',
+        },
         {
           href: 'https://github.com/weizxfree/KnowFlow',
           label: 'GitHub',
