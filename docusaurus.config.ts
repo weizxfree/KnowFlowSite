@@ -78,7 +78,7 @@ const config: Config = {
       title: 'KnowFlow',
       logo: {
         alt: 'KnowFlow Logo',
-        src: 'img/logo.svg',
+        src: 'img/k-icon-3.svg',
       },
       items: [
         {

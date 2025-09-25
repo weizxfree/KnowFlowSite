@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KnowFlow Logo 导出工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1e40af;
+            margin-bottom: 30px;
+        }
+
+        .export-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .logo-preview {
+            text-align: center;
+            margin: 30px 0;
+            padding: 30px;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .logo-preview img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .size-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .size-box {
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            text-align: center;
+            background: white;
+        }
+
+        .size-box canvas {
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #1e40af, #0ea5e9);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
+        }
+
+        .download-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        h2 {
+            color: #1e293b;
+            margin-bottom: 15px;
+        }
+
+        .format-note {
+            color: #64748b;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 KnowFlow Logo 导出工具</h1>
+
+        <div class="export-card">
+            <h2>组合Logo预览</h2>
+            <div class="logo-preview">
+                <img src="img/knowflow-logo-combined.svg" alt="KnowFlow Logo" id="svgPreview">
+            </div>
+
+            <div class="download-section">
+                <h3 style="margin-bottom: 15px;">SVG 格式下载</h3>
+                <a href="img/knowflow-logo-combined.svg" download="knowflow-logo.svg" class="btn">
+                    下载 SVG 格式
+                </a>
+                <p class="format-note">矢量格式，无限缩放，适用于所有场景</p>
+            </div>
+        </div>
+
+        <div class="export-card">
+            <h2>PNG 格式导出</h2>
+            <p style="color: #64748b; margin-bottom: 20px;">选择尺寸并下载PNG格式图片</p>
+
+            <div class="size-grid">
+                <div class="size-box">
+                    <canvas id="canvas-small" width="120" height="30"></canvas>
+                    <div>120x30</div>
+                    <button class="btn" onclick="downloadPNG('small')">下载</button>
+                </div>
+
+                <div class="size-box">
+                    <canvas id="canvas-medium" width="240" height="60"></canvas>
+                    <div>240x60</div>
+                    <button class="btn" onclick="downloadPNG('medium')">下载</button>
+                </div>
+
+                <div class="size-box">
+                    <canvas id="canvas-large" width="480" height="120"></canvas>
+                    <div>480x120</div>
+                    <button class="btn" onclick="downloadPNG('large')">下载</button>
+                </div>
+
+                <div class="size-box">
+                    <canvas id="canvas-xlarge" width="960" height="240"></canvas>
+                    <div>960x240</div>
+                    <button class="btn" onclick="downloadPNG('xlarge')">下载</button>
+                </div>
+            </div>
+
+            <div class="download-section" style="margin-top: 30px;">
+                <h3>批量下载所有尺寸</h3>
+                <button class="btn" onclick="downloadAllPNG()">下载所有PNG尺寸</button>
+                <p class="format-note">将生成并下载所有尺寸的PNG文件</p>
+            </div>
+        </div>
+
+        <div class="export-card">
+            <h2>使用说明</h2>
+            <ul style="line-height: 1.8; color: #475569;">
+                <li>✅ SVG格式：矢量图形，可无限缩放，推荐用于网站和文档</li>
+                <li>✅ PNG格式：位图格式，适用于GitHub、社交媒体等场景</li>
+                <li>✅ 120x30：适用于小尺寸徽章</li>
+                <li>✅ 240x60：标准Logo尺寸</li>
+                <li>✅ 480x120：高清显示</li>
+                <li>✅ 960x240：超高清显示</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // 加载SVG并绘制到Canvas
+        function loadAndDrawSVG() {
+            const img = new Image();
+            img.onload = function() {
+                // 绘制不同尺寸
+                drawToCanvas('canvas-small', img, 120, 30);
+                drawToCanvas('canvas-medium', img, 240, 60);
+                drawToCanvas('canvas-large', img, 480, 120);
+                drawToCanvas('canvas-xlarge', img, 960, 240);
+            };
+            img.src = 'img/knowflow-logo-combined.svg';
+        }
+
+        function drawToCanvas(canvasId, img, width, height) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+
+            // 清空画布
+            ctx.clearRect(0, 0, width, height);
+
+            // 绘制图像
+            ctx.drawImage(img, 0, 0, width, height);
+        }
+
+        // 下载PNG
+        function downloadPNG(size) {
+            const sizes = {
+                'small': { id: 'canvas-small', name: 'knowflow-logo-120x30.png' },
+                'medium': { id: 'canvas-medium', name: 'knowflow-logo-240x60.png' },
+                'large': { id: 'canvas-large', name: 'knowflow-logo-480x120.png' },
+                'xlarge': { id: 'canvas-xlarge', name: 'knowflow-logo-960x240.png' }
+            };
+
+            const canvas = document.getElementById(sizes[size].id);
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = sizes[size].name;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 'image/png');
+        }
+
+        // 批量下载所有PNG
+        function downloadAllPNG() {
+            setTimeout(() => downloadPNG('small'), 100);
+            setTimeout(() => downloadPNG('medium'), 300);
+            setTimeout(() => downloadPNG('large'), 500);
+            setTimeout(() => downloadPNG('xlarge'), 700);
+        }
+
+        // 页面加载完成后执行
+        window.onload = function() {
+            loadAndDrawSVG();
+        };
+    </script>
+</body>
+</html>

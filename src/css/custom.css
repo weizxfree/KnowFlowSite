@@ -45,10 +45,40 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
-/* Logo styling */
+/* Logo styling - 带图标的组合Logo */
+.navbar__logo {
+  margin-right: 0.3rem; /* 减小图标与文字的间距 */
+  margin-left: 0.5rem; /* 增加左侧间距 */
+}
+
 .navbar__logo img {
-  height: 36px;
+  height: 36px; /* Logo图标高度 */
   width: auto;
+}
+
+/* 调整导航栏标题与图标的整体间距 */
+.navbar__brand {
+  margin-right: 1rem; /* 与导航项的间距 */
+  padding-left: 0.5rem; /* 增加品牌区域左侧内边距 */
+}
+
+/* KnowFlow文本渐变效果 */
+.navbar__title {
+  background: linear-gradient(90deg, #1e40af 0%, #2563eb 40%, #0ea5e9 60%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 500;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+/* 深色模式下的文本渐变 */
+[data-theme='dark'] .navbar__title {
+  background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 50%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* Navbar styling */
