@@ -159,6 +159,33 @@
   color: #6b7280;
 }
 
+.errorMessage {
+  text-align: center;
+  padding: 3rem;
+}
+
+.errorIcon {
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.errorMessage h3 {
+  font-size: 1.5rem;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.errorMessage p {
+  color: #6b7280;
+}
+
 .infoContainer {
   display: flex;
   flex-direction: column;

@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import Layout from '@theme/Layout';
 import styles from './contact.module.css';
+import { sendToWeChatWork } from '../utils/webhook';
+
+const INITIAL_FORM_DATA = {
+  name: '',
+  company: '',
+  position: '',
+  email: '',
+  phone: '',
+  need: '演示',
+  message: '',
+};
 
 export default function Contact(): JSX.Element {
-  const [formData, setFormData] = useState({
-    name: '',
-    company: '',
-    position: '',
-    email: '',
-    phone: '',
-    need: '演示',
-    message: '',
-  });
+  const [formData, setFormData] = useState(INITIAL_FORM_DATA);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -27,26 +30,27 @@ export default function Contact(): JSX.Element {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // 模拟表单提交
-    setTimeout(() => {
-      console.log('Form submitted:', formData);
-      setIsSubmitting(false);
-      setSubmitStatus('success');
+    try {
+      const success = await sendToWeChatWork(formData);
 
-      // 重置表单
-      setTimeout(() => {
-        setFormData({
-          name: '',
-          company: '',
-          position: '',
-          email: '',
-          phone: '',
-          need: '演示',
-          message: '',
-        });
-        setSubmitStatus('idle');
-      }, 3000);
-    }, 1000);
+      if (success) {
+        setSubmitStatus('success');
+        // 重置表单
+        setTimeout(() => {
+          setFormData(INITIAL_FORM_DATA);
+          setSubmitStatus('idle');
+        }, 3000);
+      } else {
+        setSubmitStatus('error');
+        setTimeout(() => setSubmitStatus('idle'), 5000);
+      }
+    } catch (error) {
+      console.error('提交失败:', error);
+      setSubmitStatus('error');
+      setTimeout(() => setSubmitStatus('idle'), 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -78,6 +82,12 @@ export default function Contact(): JSX.Element {
                   <span className={styles.successIcon}>✓</span>
                   <h3>提交成功！</h3>
                   <p>感谢您的咨询，我们会尽快与您联系。</p>
+                </div>
+              ) : submitStatus === 'error' ? (
+                <div className={styles.errorMessage}>
+                  <span className={styles.errorIcon}>✗</span>
+                  <h3>提交失败！</h3>
+                  <p>提交出现问题，请稍后重试或直接联系我们。</p>
                 </div>
               ) : (
                 <form className={styles.form} onSubmit={handleSubmit}>
