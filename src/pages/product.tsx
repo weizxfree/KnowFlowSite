@@ -120,10 +120,15 @@ export default function Product(): JSX.Element {
       </section>
 
       <section className={styles.comparison}>
-        <div className="container">
+        <div className={styles.comparisonContainer}>
           <h2 className={styles.sectionTitle}>产品对比</h2>
           <div className={styles.comparisonTable}>
             <table>
+              <colgroup>
+                <col className={styles.featureCol} />
+                <col className={styles.ourCol} />
+                <col className={styles.otherCol} />
+              </colgroup>
               <thead>
                 <tr>
                   <th>对比维度</th>

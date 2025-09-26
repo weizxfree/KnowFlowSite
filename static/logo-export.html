@@ -126,7 +126,7 @@
         </div>
 
         <div class="export-card">
-            <h2>PNG 格式导出</h2>
+            <h2>PNG 格式导出 (组合Logo)</h2>
             <p style="color: #64748b; margin-bottom: 20px;">选择尺寸并下载PNG格式图片</p>
 
             <div class="size-grid">
@@ -163,6 +163,67 @@
         </div>
 
         <div class="export-card">
+            <h2>K 图标导出 (仅图标)</h2>
+            <div class="logo-preview">
+                <img src="img/k-icon-3.svg" alt="K Icon" id="kIconPreview" style="width: 120px; height: 120px;">
+            </div>
+
+            <div class="download-section">
+                <h3 style="margin-bottom: 15px;">SVG 格式下载</h3>
+                <a href="img/k-icon-3.svg" download="k-icon.svg" class="btn">
+                    下载 K 图标 SVG
+                </a>
+                <p class="format-note">矢量格式，适用于图标、应用Logo等场景</p>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <h3 style="margin-bottom: 15px;">PNG 格式导出</h3>
+                <div class="size-grid">
+                    <div class="size-box">
+                        <canvas id="k-icon-16" width="16" height="16"></canvas>
+                        <div>16x16</div>
+                        <button class="btn" onclick="downloadKIcon('16')">下载</button>
+                    </div>
+
+                    <div class="size-box">
+                        <canvas id="k-icon-32" width="32" height="32"></canvas>
+                        <div>32x32</div>
+                        <button class="btn" onclick="downloadKIcon('32')">下载</button>
+                    </div>
+
+                    <div class="size-box">
+                        <canvas id="k-icon-64" width="64" height="64"></canvas>
+                        <div>64x64</div>
+                        <button class="btn" onclick="downloadKIcon('64')">下载</button>
+                    </div>
+
+                    <div class="size-box">
+                        <canvas id="k-icon-128" width="128" height="128"></canvas>
+                        <div>128x128</div>
+                        <button class="btn" onclick="downloadKIcon('128')">下载</button>
+                    </div>
+
+                    <div class="size-box">
+                        <canvas id="k-icon-256" width="256" height="256"></canvas>
+                        <div>256x256</div>
+                        <button class="btn" onclick="downloadKIcon('256')">下载</button>
+                    </div>
+
+                    <div class="size-box">
+                        <canvas id="k-icon-512" width="512" height="512"></canvas>
+                        <div>512x512</div>
+                        <button class="btn" onclick="downloadKIcon('512')">下载</button>
+                    </div>
+                </div>
+
+                <div class="download-section" style="margin-top: 20px;">
+                    <button class="btn" onclick="downloadAllKIcons()">下载所有图标尺寸</button>
+                    <p class="format-note">包含 16x16, 32x32, 64x64, 128x128, 256x256, 512x512</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="export-card">
             <h2>使用说明</h2>
             <ul style="line-height: 1.8; color: #475569;">
                 <li>✅ SVG格式：矢量图形，可无限缩放，推荐用于网站和文档</li>
@@ -187,6 +248,21 @@
                 drawToCanvas('canvas-xlarge', img, 960, 240);
             };
             img.src = 'img/knowflow-logo-combined.svg';
+        }
+
+        // 加载K图标并绘制到Canvas
+        function loadAndDrawKIcon() {
+            const img = new Image();
+            img.onload = function() {
+                // 绘制不同尺寸的K图标
+                drawToCanvas('k-icon-16', img, 16, 16);
+                drawToCanvas('k-icon-32', img, 32, 32);
+                drawToCanvas('k-icon-64', img, 64, 64);
+                drawToCanvas('k-icon-128', img, 128, 128);
+                drawToCanvas('k-icon-256', img, 256, 256);
+                drawToCanvas('k-icon-512', img, 512, 512);
+            };
+            img.src = 'img/k-icon-3.svg';
         }
 
         function drawToCanvas(canvasId, img, width, height) {
@@ -230,9 +306,33 @@
             setTimeout(() => downloadPNG('xlarge'), 700);
         }
 
+        // 下载K图标PNG
+        function downloadKIcon(size) {
+            const canvas = document.getElementById(`k-icon-${size}`);
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `k-icon-${size}x${size}.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 'image/png');
+        }
+
+        // 批量下载所有K图标尺寸
+        function downloadAllKIcons() {
+            const sizes = ['16', '32', '64', '128', '256', '512'];
+            sizes.forEach((size, index) => {
+                setTimeout(() => downloadKIcon(size), index * 200);
+            });
+        }
+
         // 页面加载完成后执行
         window.onload = function() {
             loadAndDrawSVG();
+            loadAndDrawKIcon();
         };
     </script>
 </body>

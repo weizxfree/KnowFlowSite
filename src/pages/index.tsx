@@ -1,6 +1,7 @@
 import React from 'react';
 import Layout from '@theme/Layout';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './index.module.css';
 
 const features = [
@@ -64,6 +65,7 @@ const testimonials = [
 
 export default function Home(): JSX.Element {
   const {siteConfig} = useDocusaurusContext();
+  const productPreview = useBaseUrl('/img/product-preview.png');
 
   return (
     <Layout
@@ -130,7 +132,7 @@ export default function Home(): JSX.Element {
 
       {/* Product Section */}
       <section className={styles.product}>
-        <div className="container">
+        <div className={styles.productContainer}>
           <div className={styles.productContent}>
             <div className={styles.productText}>
               <h2>全方位的知识管理能力</h2>
@@ -150,10 +152,11 @@ export default function Home(): JSX.Element {
               </a>
             </div>
             <div className={styles.productImage}>
-              <div className={styles.imagePlaceholder}>
-                <span>🖥️</span>
-                <p>产品界面展示</p>
-              </div>
+              <img
+                src={productPreview}
+                alt="KnowFlow 产品界面预览"
+                className={styles.productPreview}
+              />
             </div>
           </div>
         </div>

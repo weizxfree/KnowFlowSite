@@ -112,17 +112,42 @@
   background: #f8f9fa;
 }
 
+.comparisonContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  width: 100%;
+}
+
 .comparisonTable {
   overflow-x: auto;
+  width: 100%;
 }
 
 .comparisonTable table {
   width: 100%;
+  min-width: 100%;
+  display: table;
   border-collapse: collapse;
   background: white;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  table-layout: fixed;
+}
+
+.comparisonTable thead,
+.comparisonTable tbody {
+  display: table-row-group;
+}
+
+.comparisonTable tr {
+  display: table-row;
+}
+
+.comparisonTable th,
+.comparisonTable td {
+  display: table-cell;
 }
 
 .comparisonTable th {
@@ -136,6 +161,20 @@
 .comparisonTable td {
   padding: 1.25rem;
   border-bottom: 1px solid #e9ecef;
+  text-align: left;
+  word-break: break-word;
+}
+
+.comparisonTable th:nth-child(1),
+.comparisonTable td:nth-child(1) {
+  width: 34%;
+}
+
+.comparisonTable th:nth-child(2),
+.comparisonTable td:nth-child(2),
+.comparisonTable th:nth-child(3),
+.comparisonTable td:nth-child(3) {
+  width: 33%;
 }
 
 .comparisonTable tbody tr:last-child td {
@@ -145,15 +184,18 @@
 .featureCol {
   font-weight: 600;
   color: #2c3e50;
+  width: 34%;
 }
 
 .ourCol {
   color: #28a745;
   font-weight: 500;
+  width: 33%;
 }
 
 .otherCol {
-  color: #6c757d;
+  color: #4a5568;
+  width: 33%;
 }
 
 .highlight {
@@ -255,6 +297,10 @@
 @media (max-width: 768px) {
   .heroTitle {
     font-size: 2rem;
+  }
+
+  .comparisonContainer {
+    padding: 0 1.5rem;
   }
 
   .architectureContent {
