@@ -6,7 +6,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'KnowFlow',
-  tagline: '基于 RAGFlow 深度定制的企业级知识库系统',
+  tagline: 'KnowFlow 知识流动，基于 RAGFlow 深度定制的企业级知识库系统',
   favicon: 'img/favicon.svg',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -72,6 +72,11 @@ const config: Config = {
   ],
 
   themeConfig: {
+    metadata: [
+      {name: 'description', content: 'KnowFlow 知识库：企业级知识库与 RAG 系统，基于 RAGFlow 深度定制，提供安全、高效、可控的企业知识管理与智能问答能力。'},
+      {name: 'keywords', content: 'KnowFlow 知识库, 企业知识库, RAG 系统, RAGFlow, 企业 AI, 智能问答, 知识管理'},
+      {name: 'baidu-site-verification', content: 'codeva-U93CBs1T3a'},
+    ],
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
@@ -161,6 +166,14 @@ const config: Config = {
       copyright:
         'Copyright © 2025 KnowFlow Project. <img src="/img/icp-icon.png" alt="公安备案图标" width="18" height="20" style="vertical-align:middle;margin:0 4px;" /> <a href="https://beian.mps.gov.cn/#/query/webSearch?code=34019202002648" rel="noreferrer" target="_blank">皖公网安备34019202002648号</a> 皖ICP备2025099328号',
     },
+    headTags: [
+      {
+        tagName: 'script',
+        attributes: {type: 'text/javascript'},
+        innerHTML:
+          "(function(){var bp=document.createElement('script');var curProtocol=window.location.protocol.split(':')[0];if (curProtocol === 'https'){bp.src='https://zz.bdstatic.com/linksubmit/push.js'}else{bp.src='http://push.zhanzhang.baidu.com/push.js'}var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bp,s);})();",
+      },
+    ],
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
