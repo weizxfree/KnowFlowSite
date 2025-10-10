@@ -237,24 +237,72 @@
     </div>
 
     <script>
-        // 加载SVG并绘制到Canvas
+        // SVG内容直接嵌入，避免fetch和CORS问题
+        const logoSVG = `<!-- KnowFlow 组合Logo - 圆形K + 文字 -->
+<svg width="240" height="60" viewBox="0 0 240 60" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="kGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563eb"/>
+      <stop offset="100%" style="stop-color:#0ea5e9"/>
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1e40af"/>
+      <stop offset="40%" style="stop-color:#2563eb"/>
+      <stop offset="60%" style="stop-color:#0ea5e9"/>
+      <stop offset="100%" style="stop-color:#06b6d4"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(10, 5)">
+    <circle cx="25" cy="25" r="23" fill="url(#kGradient)"/>
+    <g fill="white">
+      <rect x="14" y="13" width="4" height="24"/>
+      <polygon points="17,23 31,13 34,15 20,25 20,23 34,33 31,35 17,25"/>
+    </g>
+  </g>
+  <text x="65" y="35" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+        font-size="32" font-weight="600" fill="url(#textGradient)" dominant-baseline="middle">KnowFlow</text>
+</svg>`;
+
+        const kIconSVG = `<!-- K图标3：实心K负空间 -->
+<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563eb"/>
+      <stop offset="100%" style="stop-color:#0ea5e9"/>
+    </linearGradient>
+  </defs>
+  <circle cx="30" cy="30" r="28" fill="url(#bgGrad3)"/>
+  <g fill="white">
+    <rect x="16" y="15" width="5" height="30"/>
+    <polygon points="20,28 38,15 42,18 24,31 24,29 42,42 38,45 20,32"/>
+  </g>
+</svg>`;
+
+        // 将SVG转换为可用的图片源
+        function svgToImageSrc(svgString) {
+            const blob = new Blob([svgString], { type: 'image/svg+xml' });
+            return URL.createObjectURL(blob);
+        }
+
+        // 加载并绘制组合Logo
         function loadAndDrawSVG() {
+            const url = svgToImageSrc(logoSVG);
             const img = new Image();
-            img.crossOrigin = 'anonymous';  // 允许跨域加载，防止canvas被污染
             img.onload = function() {
                 // 绘制不同尺寸
                 drawToCanvas('canvas-small', img, 120, 30);
                 drawToCanvas('canvas-medium', img, 240, 60);
                 drawToCanvas('canvas-large', img, 480, 120);
                 drawToCanvas('canvas-xlarge', img, 960, 240);
+                URL.revokeObjectURL(url);
             };
-            img.src = 'img/knowflow-logo-combined.svg';
+            img.src = url;
         }
 
-        // 加载K图标并绘制到Canvas
+        // 加载并绘制K图标
         function loadAndDrawKIcon() {
+            const url = svgToImageSrc(kIconSVG);
             const img = new Image();
-            img.crossOrigin = 'anonymous';  // 允许跨域加载，防止canvas被污染
             img.onload = function() {
                 // 绘制不同尺寸的K图标
                 drawToCanvas('k-icon-16', img, 16, 16);
@@ -263,8 +311,9 @@
                 drawToCanvas('k-icon-128', img, 128, 128);
                 drawToCanvas('k-icon-256', img, 256, 256);
                 drawToCanvas('k-icon-512', img, 512, 512);
+                URL.revokeObjectURL(url);
             };
-            img.src = 'img/k-icon-3.svg';
+            img.src = url;
         }
 
         function drawToCanvas(canvasId, img, width, height) {
