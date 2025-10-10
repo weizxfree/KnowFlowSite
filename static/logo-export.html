@@ -67,6 +67,14 @@
 
         .size-box canvas {
             margin-bottom: 10px;
+            /* 棋盘格背景，用于显示透明效果 */
+            background-image:
+                linear-gradient(45deg, #f0f0f0 25%, transparent 25%),
+                linear-gradient(-45deg, #f0f0f0 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #f0f0f0 75%),
+                linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
         }
 
         .btn {
@@ -227,11 +235,12 @@
             <h2>使用说明</h2>
             <ul style="line-height: 1.8; color: #475569;">
                 <li>✅ SVG格式：矢量图形，可无限缩放，推荐用于网站和文档</li>
-                <li>✅ PNG格式：位图格式，适用于GitHub、社交媒体等场景</li>
+                <li>✅ PNG格式：位图格式，白色背景，适用于GitHub、社交媒体等场景</li>
                 <li>✅ 120x30：适用于小尺寸徽章</li>
                 <li>✅ 240x60：标准Logo尺寸</li>
                 <li>✅ 480x120：高清显示</li>
                 <li>✅ 960x240：超高清显示</li>
+                <li>💡 预览区域的棋盘格背景仅用于视觉效果</li>
             </ul>
         </div>
     </div>
@@ -320,8 +329,9 @@
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
 
-            // 清空画布
-            ctx.clearRect(0, 0, width, height);
+            // 填充白色背景
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(0, 0, width, height);
 
             // 绘制图像
             ctx.drawImage(img, 0, 0, width, height);
