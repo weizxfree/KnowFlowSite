@@ -51,13 +51,13 @@ export default function About(): JSX.Element {
   return (
     <Layout
       title="关于我们"
-      description="了解 KnowFlow 团队和我们的使命">
+      description="了解 KnowFlow - 企业级高精度私有化智能知识库平台">
 
       <section className={styles.hero}>
         <div className="container">
           <h1 className={styles.heroTitle}>关于 KnowFlow</h1>
           <p className={styles.heroSubtitle}>
-            专注于企业知识库与 RAG 系统，让每个企业都能拥有智能化的知识管理能力
+            企业级高精度私有化智能知识库平台，让企业的知识真正可问、可信、可控
           </p>
         </div>
       </section>
@@ -167,7 +167,7 @@ export default function About(): JSX.Element {
             </div>
             <div className={styles.contactCard}>
               <h3>📱 微信咨询</h3>
-              <p>knowflowchat</p>
+              <p>skycode007</p>
             </div>
           </div>
         </div>

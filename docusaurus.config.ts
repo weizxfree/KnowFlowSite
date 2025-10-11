@@ -6,7 +6,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'KnowFlow',
-  tagline: 'KnowFlow 知识流动，基于 RAGFlow 深度定制的企业级知识库系统',
+  tagline: '企业级高精度私有化智能知识库平台',
   favicon: 'img/favicon.svg',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -73,7 +73,7 @@ const config: Config = {
 
   themeConfig: {
     metadata: [
-      {name: 'description', content: 'KnowFlow 知识库：企业级知识库与 RAG 系统，基于 RAGFlow 深度定制，提供安全、高效、可控的企业知识管理与智能问答能力。'},
+      {name: 'description', content: 'KnowFlow - 企业级高精度私有化智能知识库平台，让企业的知识真正可问、可信、可控。'},
       {name: 'keywords', content: 'KnowFlow 知识库, 企业知识库, RAG 系统, RAGFlow, 企业 AI, 智能问答, 知识管理'},
       {name: 'baidu-site-verification', content: 'codeva-U93CBs1T3a'},
     ],

@@ -69,19 +69,18 @@ export default function Home(): JSX.Element {
 
   return (
     <Layout
-      title="企业级知识库与 RAG 系统"
-      description="基于 RAGFlow 深度定制的企业知识管理解决方案">
+      title="KnowFlow —— 企业级高精度私有化智能知识库平台"
+      description="让企业的知识真正可问、可信、可控">
 
       {/* Hero Section */}
       <section className={styles.hero}>
         <div className="container">
           <div className={styles.heroContent}>
             <h1 className={styles.heroTitle}>
-              企业级知识库与
-              <span className={styles.highlight}> RAG 系统</span>
+              企业级<span className={styles.highlight}>高精度私有化</span>知识库平台
             </h1>
             <p className={styles.heroSubtitle}>
-              基于 RAGFlow 深度定制，为企业提供安全、高效、可控的知识管理解决方案
+              让企业的知识真正可问、可信、可控
             </p>
             <div className={styles.heroCta}>
               <a href="/contact" className={styles.primaryButton}>
@@ -132,7 +131,7 @@ export default function Home(): JSX.Element {
 
       {/* Product Section */}
       <section className={styles.product}>
-        <div className={styles.productContainer}>
+        <div className="container">
           <div className={styles.productContent}>
             <div className={styles.productText}>
               <h2>全方位的知识管理能力</h2>

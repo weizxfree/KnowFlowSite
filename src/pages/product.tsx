@@ -67,13 +67,13 @@ export default function Product(): JSX.Element {
   return (
     <Layout
       title="产品介绍"
-      description="KnowFlow 企业级知识库与 RAG 系统产品介绍">
+      description="KnowFlow - 企业级高精度私有化智能知识库平台">
 
       <section className={styles.hero}>
         <div className="container">
-          <h1 className={styles.heroTitle}>企业级知识库与 RAG 系统</h1>
+          <h1 className={styles.heroTitle}>企业级高精度私有化智能知识库平台</h1>
           <p className={styles.heroSubtitle}>
-            基于 RAGFlow 深度定制，为企业提供安全、高效、可控的知识管理解决方案
+            让企业的知识真正可问、可信、可控
           </p>
         </div>
       </section>

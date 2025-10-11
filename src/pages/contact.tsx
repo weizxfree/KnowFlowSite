@@ -56,7 +56,7 @@ export default function Contact(): JSX.Element {
   return (
     <Layout
       title="联系我们"
-      description="联系 KnowFlow 团队，获取产品演示和定制方案">
+      description="联系 KnowFlow 团队，获取企业级高精度私有化智能知识库平台演示和定制方案">
 
       <section className={styles.hero}>
         <div className="container">
@@ -132,14 +132,14 @@ export default function Contact(): JSX.Element {
                       />
                     </div>
                     <div className={styles.formGroup}>
-                      <label htmlFor="phone">联系电话</label>
+                      <label htmlFor="phone">联系电话或微信</label>
                       <input
                         type="tel"
                         id="phone"
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        placeholder="请输入联系电话"
+                        placeholder="请输入联系电话或微信号"
                       />
                     </div>
                   </div>
@@ -222,7 +222,7 @@ export default function Contact(): JSX.Element {
                   <span className={styles.infoIcon}>📱</span>
                   <div>
                     <p className={styles.infoLabel}>微信咨询</p>
-                    <p className={styles.infoValue}>knowflowchat</p>
+                    <p className={styles.infoValue}>skycode007</p>
                   </div>
                 </div>
               </div>
