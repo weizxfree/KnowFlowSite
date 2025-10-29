@@ -18,6 +18,13 @@
 - KnowFlow API Key 和 Base URL
 - (可选) MinIO 访问配置
 
+:::tip 重要提示
+如果您在同一环境中同时部署了 Dify 和 RAGFlow,在启动 Dify 服务时需要添加 `-p dify` 参数,以避免端口冲突:
+```bash
+docker-compose -p dify up -d
+```
+:::
+
 ## 对接步骤
 
 ### 步骤 1: 下载并安装插件
