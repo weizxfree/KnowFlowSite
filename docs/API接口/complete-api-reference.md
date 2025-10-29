@@ -3197,7 +3197,7 @@ class MonitoredAPIClient:
 
 - **v2.1.5** (2025-09-01)
   - 初始版本发布
-  - 基于 RAGFlow v0.20.1
+  - 基于 RAGFlow v0.20.5
 
 ---
 

@@ -1,0 +1,8 @@
+{
+  "label": "API 接口",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "KnowFlow 提供完整的 RESTful API 接口文档，包括知识库管理、文档处理、检索服务等核心功能接口。"
+  }
+}

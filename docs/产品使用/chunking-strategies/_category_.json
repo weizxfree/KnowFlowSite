@@ -1,0 +1,8 @@
+{
+  "label": "分块策略",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "分块策略决定了如何将长文档切分成适合检索的文本片段。KnowFlow 提供智能分块、标题分块、父子分块和正则分块四种策略,适用于不同的文档类型和使用场景。"
+  }
+}

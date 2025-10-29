@@ -19,9 +19,9 @@
 - (可选) MinIO 访问配置
 
 :::tip 重要提示
-如果您在同一环境中同时部署了 Dify 和 RAGFlow,在启动 Dify 服务时需要添加 `-p dify` 参数,以避免端口冲突:
+如果您在同一环境中同时部署了 Dify 和 RAGFlow,在启动 Dify 服务时需要添加 `-p dify` 参数,以避免容器冲突:
 ```bash
-docker-compose -p dify up -d
+docker compose -f docker-compose.yaml -p dify up -d
 ```
 :::
 

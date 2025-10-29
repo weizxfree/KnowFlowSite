@@ -2,7 +2,7 @@
 sidebar_position: 3
 ---
 
-# 🏗️ 技术架构常见问题
+# 技术架构常见问题
 
 :::info 文档说明
 本文档解答 KnowFlow 技术架构、企业级特性、部署方式等相关问题。
@@ -134,7 +134,7 @@ KnowFlow 不是 RAGFlow 的分支，而是基于 RAGFlow 的企业级增强解�
 采用非侵入式设计，确保 RAGFlow 升级时 KnowFlow 能够平滑迁移。
 :::
 
-## 🚀 部署架构
+## 部署架构
 
 ### 📦 Q: KnowFlow 支持哪些部署方式？
 

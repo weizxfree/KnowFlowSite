@@ -1,8 +1,8 @@
 {
   "label": "常见问题",
-  "position": 3,
+  "position": 5,
   "link": {
     "type": "generated-index",
-    "description": "KnowFlow 常见问题解答"
+    "description": "KnowFlow 常见问题解答，包括安装部署、产品使用和技术问题。"
   }
 }
