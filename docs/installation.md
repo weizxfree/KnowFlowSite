@@ -6,6 +6,10 @@ sidebar_position: 2
 
 本指南将帮助您完成 KnowFlow 的完整部署过程，包括环境准备、服务配置和系统启动。
 
+:::warning 版本说明
+本安装指南适用于 **KnowFlow v2.1.2** 社区版本。其他版本请以部署文档中的 `README.md` 为准。
+:::
+
 :::info 部署概览
 支持 **Docker Compose** 和**源码部署**两种方式，推荐使用 Docker Compose 进行生产环境部署。
 :::

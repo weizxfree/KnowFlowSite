@@ -1,45 +1,57 @@
 /* Hero Section */
 .hero {
-  background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
   padding: 100px 0 80px;
   position: relative;
   overflow: hidden;
+  color: white;
 }
 
 .heroContent {
   text-align: center;
-  max-width: 900px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
-.heroTitle {
-  font-size: 3.5rem;
-  font-weight: 700;
-  color: #1a202c;
+.heroBadge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.5rem 1.25rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 600;
   margin-bottom: 1.5rem;
-  line-height: 1.2;
+  letter-spacing: 0.05em;
+  backdrop-filter: blur(10px);
+}
+
+.heroTitle {
+  font-size: 3rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 1.5rem;
+  line-height: 1.3;
 }
 
 .highlight {
-  color: #3b82f6;
-  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #fbbf24;
 }
 
 .heroSubtitle {
-  font-size: 1.25rem;
-  color: #64748b;
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.9);
   margin-bottom: 2.5rem;
-  line-height: 1.6;
+  line-height: 1.8;
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .heroCta {
   display: flex;
   gap: 1rem;
   justify-content: center;
-  margin-bottom: 3rem;
 }
 
 .primaryButton,
@@ -54,53 +66,29 @@
 }
 
 .primaryButton {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  color: white;
-  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+  background: white;
+  color: #1e40af;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
 }
 
 .primaryButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
   text-decoration: none;
-  color: white;
+  color: #1e40af;
 }
 
 .secondaryButton {
-  background: white;
-  color: #3b82f6;
-  border: 2px solid #3b82f6;
+  background: transparent;
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.6);
 }
 
 .secondaryButton:hover {
-  background: #f0f4ff;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: white;
   text-decoration: none;
-  color: #3b82f6;
-}
-
-.heroStats {
-  display: flex;
-  justify-content: center;
-  gap: 4rem;
-}
-
-.stat {
-  text-align: center;
-}
-
-.statNumber {
-  display: block;
-  font-size: 2rem;
-  font-weight: 700;
-  color: #3b82f6;
-  margin-bottom: 0.25rem;
-}
-
-.statLabel {
-  font-size: 0.875rem;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  color: white;
 }
 
 /* Section Headers */
@@ -119,55 +107,132 @@
 .sectionSubtitle {
   font-size: 1.125rem;
   color: #64748b;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-/* Features Section */
-.features {
+/* Core Capabilities Section */
+.coreCapabilities {
   padding: 80px 0;
   background: white;
 }
 
-.featureGrid {
+.capabilitiesList {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.capabilityCard {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-}
-
-.featureCard {
-  text-align: center;
-  padding: 2rem;
-  border-radius: 12px;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 4rem;
+  align-items: center;
+  padding: 3rem;
   background: #f8fafc;
-  transition: all 0.3s;
+  border-radius: 20px;
 }
 
-.featureCard:hover {
-  background: white;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  transform: translateY(-4px);
+.capabilityCardReverse {
+  direction: rtl;
 }
 
-.featureIcon {
+.capabilityCardReverse > * {
+  direction: ltr;
+}
+
+.capabilityContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.capabilityNumber {
   font-size: 3rem;
+  font-weight: 800;
+  color: #e2e8f0;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.capabilityTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 0.5rem;
+}
+
+.capabilitySubtitle {
+  font-size: 1rem;
+  color: #3b82f6;
+  font-weight: 500;
   margin-bottom: 1rem;
 }
 
-.featureTitle {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #1a202c;
-  margin-bottom: 0.75rem;
+.capabilityDescription {
+  font-size: 1rem;
+  color: #64748b;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
 }
 
-.featureDescription {
-  color: #64748b;
+.capabilityFeatures {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+}
+
+.capabilityFeatures li {
+  padding: 0.5rem 0;
+  padding-left: 1.75rem;
+  position: relative;
+  color: #475569;
   line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.capabilityFeatures li:before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #10b981;
+  font-weight: bold;
+}
+
+.capabilityValue {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-radius: 10px;
+}
+
+.valueIcon {
+  font-size: 1.25rem;
+}
+
+.valueText {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #92400e;
+}
+
+.capabilityVisual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.capabilityIcon {
+  font-size: 8rem;
+  opacity: 0.9;
 }
 
 /* Product Section */
 .product {
   padding: 80px 0;
-  background: #f8fafc;
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  color: white;
 }
 
 .productContent {
@@ -182,13 +247,13 @@
 .productText h2 {
   font-size: 2rem;
   font-weight: 700;
-  color: #1a202c;
+  color: white;
   margin-bottom: 1.5rem;
 }
 
 .productText p {
   font-size: 1.125rem;
-  color: #64748b;
+  color: rgba(255, 255, 255, 0.9);
   margin-bottom: 2rem;
   line-height: 1.7;
 }
@@ -203,7 +268,7 @@
   padding: 0.75rem 0;
   padding-left: 2rem;
   position: relative;
-  color: #475569;
+  color: rgba(255, 255, 255, 0.95);
   line-height: 1.6;
 }
 
@@ -211,24 +276,28 @@
   content: '✓';
   position: absolute;
   left: 0;
-  color: #3b82f6;
+  color: #34d399;
   font-weight: bold;
   font-size: 1.25rem;
 }
 
 .learnMore {
-  color: #3b82f6;
+  color: white;
   font-weight: 600;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   transition: all 0.2s;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
 }
 
 .learnMore:hover {
-  color: #2563eb;
+  background: rgba(255, 255, 255, 0.25);
   transform: translateX(4px);
   text-decoration: none;
+  color: white;
 }
 
 .productImage {
@@ -243,42 +312,44 @@
   display: block;
   height: auto;
   border-radius: 12px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(148, 163, 184, 0.4);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Scenarios Section */
 .scenarios {
   padding: 80px 0;
-  background: white;
+  background: #f8fafc;
 }
 
 .scenarioGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
 }
 
 .scenarioCard {
-  padding: 2rem;
+  padding: 2rem 1.5rem;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
   text-align: center;
   transition: all 0.3s;
+  background: white;
 }
 
 .scenarioCard:hover {
   border-color: #3b82f6;
   box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1);
+  transform: translateY(-4px);
 }
 
 .scenarioIcon {
-  font-size: 3rem;
+  font-size: 2.5rem;
   margin-bottom: 1rem;
 }
 
 .scenarioCard h3 {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 600;
   color: #1a202c;
   margin-bottom: 0.75rem;
@@ -287,29 +358,30 @@
 .scenarioCard p {
   color: #64748b;
   line-height: 1.6;
+  font-size: 0.9rem;
 }
 
 /* Testimonials Section */
 .testimonials {
   padding: 80px 0;
-  background: #f8fafc;
+  background: white;
 }
 
 .testimonialGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
 }
 
 .testimonialCard {
-  background: white;
+  background: #f8fafc;
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
 }
 
 .testimonialContent {
-  font-size: 1.125rem;
+  font-size: 1rem;
   color: #475569;
   line-height: 1.7;
   margin-bottom: 1.5rem;
@@ -335,7 +407,7 @@
 /* CTA Section */
 .cta {
   padding: 80px 0;
-  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+  background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
   color: white;
 }
 
@@ -354,7 +426,7 @@
 .ctaContent p {
   font-size: 1.25rem;
   margin-bottom: 2rem;
-  opacity: 0.95;
+  opacity: 0.9;
 }
 
 .ctaButtons {
@@ -374,27 +446,29 @@
 }
 
 .ctaPrimary {
-  background: white;
-  color: #3b82f6;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
 }
 
 .ctaPrimary:hover {
-  background: #f0f4ff;
   transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
   text-decoration: none;
-  color: #3b82f6;
+  color: white;
 }
 
 .ctaSecondary {
   background: transparent;
   color: white;
-  border: 2px solid white;
+  border: 2px solid rgba(255, 255, 255, 0.5);
 }
 
 .ctaSecondary:hover {
-  background: white;
-  color: #3b82f6;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: white;
   text-decoration: none;
+  color: white;
 }
 
 /* Responsive Design */
@@ -402,29 +476,69 @@
   .productPreview {
     max-width: 550px;
   }
+
+  .scenarioGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 992px) {
+  .capabilityCard {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .capabilityCardReverse {
+    direction: ltr;
+  }
+
+  .capabilityVisual {
+    order: -1;
+  }
+
+  .capabilityIcon {
+    font-size: 5rem;
+  }
+
   .productPreview {
     max-width: 480px;
+  }
+
+  .testimonialGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
-  .heroTitle {
-    font-size: 2.5rem;
+  .hero {
+    padding: 60px 0;
   }
 
-  .heroStats {
-    gap: 2rem;
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1rem;
+  }
+
+  .heroCta {
+    flex-direction: column;
+    align-items: center;
   }
 
   .productContent {
     grid-template-columns: 1fr;
   }
 
-  .featureGrid,
-  .scenarioGrid,
+  .productImage {
+    order: -1;
+  }
+
+  .scenarioGrid {
+    grid-template-columns: 1fr;
+  }
+
   .testimonialGrid {
     grid-template-columns: 1fr;
   }
@@ -432,5 +546,21 @@
   .ctaButtons {
     flex-direction: column;
     align-items: center;
+  }
+
+  .ctaContent h2 {
+    font-size: 1.75rem;
+  }
+
+  .sectionTitle {
+    font-size: 2rem;
+  }
+
+  .capabilityCard {
+    padding: 2rem 1.5rem;
+  }
+
+  .capabilityTitle {
+    font-size: 1.25rem;
   }
 }
