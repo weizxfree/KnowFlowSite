@@ -269,8 +269,7 @@ Stage 2: 多向量 MaxSim 精排（精确匹配）
 ## 获取帮助
 
 如需更多帮助，请：
-- 查看 [ColPali 集成设计文档](/KnowFlowPro/docs/claude/colpali-integration-design.md)
-- 访问 [GitHub Issues](https://github.com/weizxfree/KnowFlow/issues)
+- 访问 [GitHub Issues](https://github.com/knowflow-ai/KnowFlow)
 - 联系技术支持团队
 
 ---
